@@ -5,10 +5,7 @@ import sys
 # Modules of the current program.
 import data_manager
 import ui
-
-
-def separator():
-    print("-" * 70)
+from statistics import *
 
 
 def main():
@@ -20,53 +17,59 @@ def main():
     print(ui.print_menu())
 
     while True:
-        separator()
+        ui.separator()
         choice = input("Choose an option: ")
 
         if choice == "1":
             os.system("clear")
-            separator()
+            ui.separator()
+
+            header = ["", "MAŁOPOLSKIE"]
+
+            LocationList().list_statistics()
 
         elif choice == "2":
             os.system("clear")
-            separator()
+            ui.separator()
 
         elif choice == "3":
             os.system("clear")
-            separator()
+            ui.separator()
 
         elif choice == "4":
             os.system("clear")
-            separator()
+            ui.separator()
 
         elif choice == "5":
             os.system("clear")
-            separator()
+            ui.separator()
 
-        # SECRET OPTION: Display the full content table in the console.
+        # SECRET OPTION: Display the full content of the dynamic table in the console.
         elif choice == "666":
             os.system("clear")
 
             headers = ["Województwo", "Powiat", "Gmina", "Rodzaj gminy", "Nazwa", "Typ"]
 
-            file_content = data_manager.csv_reader("malopolska.csv")
-            print(ui.print_table(headers, file_content))
+            print(ui.print_table(headers, raw_file_content))
 
-        # Exit from the program.
+        # Exit from the program with a random greetings.
         elif choice == "0":
-            separator()
+            ui.separator()
+            print(ui.random_greetings())
+            ui.separator()
             sys.exit()
 
         else:
             os.system("clear")
-            separator()
-            print("Wrong number or invalid sign!\nPlease type the proper number")
-            separator()
+            ui.separator()
+            print(ui.Color.RED + "Wrong number or invalid sign!\nPlease type the proper number" + ui.Color.END)
+            ui.separator()
             print(ui.print_menu())
 
 if __name__ == "__main__":
-    main()
+    # 1st step: Invoke reading the content from the following CSV file.
+    raw_file_content = data_manager.csv_reader("malopolska.csv")
+    # 2nd step: Invoke converting the file's content to the list of objects.
+    data_manager.table_converter(raw_file_content)
 
-    # Automaticly convert the content from the file to the list of objects.
-    file_content = data_manager.csv_reader("malopolska.csv")
-    data_manager.table_converter(file_content)
+    main()

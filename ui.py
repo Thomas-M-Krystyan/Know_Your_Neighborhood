@@ -11,6 +11,9 @@ class Color:
     YELLOW = "\033[93m"
     RED = "\033[91m"
     BOLD = "\033[1m"
+
+    GREY_AREA = "\x1b[0;30;47m"
+
     END = "\033[0m"
 
 
@@ -19,7 +22,7 @@ def separator():
     Decorative function to separate lines in the command console.
     Lenght of the line is calculated on the base of CLI's screen size.
     """
-    cli_width = shutil.get_terminal_size()[0]  # [0] = width, [1] = height.
+    cli_width = shutil.get_terminal_size()[0]  # [0] = width of terminal, [1] = height of terminal.
     print("-" * cli_width)
 
 
@@ -38,7 +41,7 @@ def print_menu():
     return main_menu
 
 
-def print_center_table(headers, table_rows):
+def print_table(headers, table_rows):
     """
     Function which is used to display dynamic table in the console.
 
@@ -48,7 +51,7 @@ def print_center_table(headers, table_rows):
     Return:
         dynamic table of strings
     """
-    # Creating the dynamic table (if there is at least one row in it).
+    # Create the dynamic table (if there is at least one row in it).
     if table_rows:
 
         # Count a length of the headers line.
@@ -73,14 +76,14 @@ def print_center_table(headers, table_rows):
         for word_length in column_length:
             width = width + word_length + 3
 
-        # Return first line (separator) of the table.
+        # NOTE [1st DATA ELEMENT]: Return first line (separator) of the table.
         first_line = "." + "".rjust(width - 1, "-") + ".\n"
 
-        # Return headers for the table.
+        # NOTE [2nd DATA ELEMENT]: Return headers for the table.
         header_content = []
 
         for element_number, element in enumerate(headers):
-            headers_line = "|{:^{}}".format(element, column_length[element_number] + 2)
+            headers_line = "|" + Color.GREY_AREA + "{:^{}}".format(element, column_length[element_number] + 2) + Color.END
             header_content.append(headers_line)
         end_headers_line = "|"
         header_content.append(end_headers_line)
@@ -89,7 +92,7 @@ def print_center_table(headers, table_rows):
         header_separator_line = "\n|" + "".rjust(width - 1, "-") + "|\n"
         header_content.append(header_separator_line)
 
-        # Return data content for the table.
+        # NOTE [3rd DATA ELEMENT]: Return data content for the table.
         table_content = []
         # Count the amount of all rows in the table.
         number_of_items = 0
@@ -112,17 +115,17 @@ def print_center_table(headers, table_rows):
                 end_line = "\'" + "".rjust(width - 1, "-") + "'\n"
                 table_content.append(end_line)
 
-        # Display the sum of all items (columns) in the table.
+        # NOTE [4th DATA ELEMENT]: Display the sum of all items (columns) in the table.
         summary = number_of_items // number_of_headers
 
-        # CONTENT FOR THE DYNAMIC TABLE.
-        data = first_line + "".join(header_content) + "".join(table_content) + "\nNumber of all rows: {}".format(summary)
+        # Create data from all the elements of above.
+        data = first_line + "".join(header_content) + "".join(table_content) + "\nNumber of all items: {}".format(summary)
 
         return data
 
     # Error handling for the empty table.
     else:
-        error_message = Color.RED + "The table is empty!" + Color.END
+        error_message = Color.RED + "ERROR: The table is empty!\nPlease check the CSV file" + Color.END
 
         return error_message
 
@@ -141,16 +144,16 @@ def random_greetings():
     now = datetime.datetime.now()
 
     if greeting == 1:
-        exit_data = "Thank you for using!"
+        exit_data = "MESSAGE: Thank you for using!"
 
         return exit_data
 
     elif greeting == 2:
-        exit_data = "Exit of the program at {}:{}:{}".format(now.hour, now.minute, now.second)
+        exit_data = "MESSAGE: Exit of the program at {}:{}:{}".format(now.hour, now.minute, now.second)
 
         return exit_data
 
     elif greeting == 3:
-        exit_data = "Program shutdown at {}:{}:{}".format(now.hour, now.minute, now.second)
+        exit_data = "MESSAGE: Program shutdown at {}:{}:{}".format(now.hour, now.minute, now.second)
 
         return exit_data

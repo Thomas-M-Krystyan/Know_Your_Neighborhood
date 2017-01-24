@@ -24,9 +24,13 @@ def main():
             os.system("clear")
             ui.separator()
 
-            header = ["", "MAŁOPOLSKIE"]
+            header = ["No.", "MAŁOPOLSKIE"]
 
-            LocationList().list_statistics()
+            received_data = LocationList().list_statistics()
+
+            print(ui.print_center_table(header, received_data))
+            ui.separator()
+            print(ui.print_menu())
 
         elif choice == "2":
             os.system("clear")
@@ -45,12 +49,12 @@ def main():
             ui.separator()
 
         # SECRET OPTION: Display the full content of the dynamic table in the console.
-        elif choice == "666":
+        elif choice == "6":
             os.system("clear")
 
             headers = ["Województwo", "Powiat", "Gmina", "Rodzaj gminy", "Nazwa", "Typ"]
 
-            print(ui.print_table(headers, raw_file_content))
+            print(ui.print_center_table(headers, raw_file_content))
 
         # Exit from the program with a random greetings.
         elif choice == "0":

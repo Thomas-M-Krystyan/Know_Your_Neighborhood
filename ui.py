@@ -38,7 +38,7 @@ def print_menu():
     return main_menu
 
 
-def print_table(headers, table_rows):
+def print_center_table(headers, table_rows):
     """
     Function which is used to display dynamic table in the console.
 
@@ -49,7 +49,7 @@ def print_table(headers, table_rows):
         dynamic table of strings
     """
     # Creating the dynamic table (if there is at least one row in it).
-    if len(table_rows) > 0:
+    if table_rows:
 
         # Count a length of the headers line.
         column_length = []
@@ -112,17 +112,19 @@ def print_table(headers, table_rows):
                 end_line = "\'" + "".rjust(width - 1, "-") + "'\n"
                 table_content.append(end_line)
 
-        # Display the sum of all items(columns) in the table.
+        # Display the sum of all items (columns) in the table.
         summary = number_of_items // number_of_headers
 
         # CONTENT FOR THE DYNAMIC TABLE.
-        data = first_line + "".join(header_content) + "".join(table_content) + "\nNumber of all items: {}".format(summary)
+        data = first_line + "".join(header_content) + "".join(table_content) + "\nNumber of all rows: {}".format(summary)
 
         return data
 
     # Error handling for the empty table.
     else:
-        raise ValueError("The table is empty!")
+        error_message = Color.RED + "The table is empty!" + Color.END
+
+        return error_message
 
 
 def random_greetings():

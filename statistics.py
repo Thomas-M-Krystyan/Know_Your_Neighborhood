@@ -49,69 +49,69 @@ class LocationList:
 
     def list_statistics(self):
         """
+        Method used to count the occurrences of the specific types of locations
+        from the indicated CSV file and convert the data to the list of tuples.
+
+        Returns:
+            list of tuples with strings
         """
-        different_counties = set()
-        urban_municipalities = 0
-        rural_municipalities = 0
-        urban_rural_municipalities = 0
-        villages = 0
-        towns = 0
-        cities = 0
+        # Calculate the following statistics.
+        number_of_different_counties = set()
+        number_of_urban_municipalities = 0
+        number_of_rural_municipalities = 0
+        number_of_urban_rural_municipalities = 0
+        number_of_villages = 0
+        number_of_towns = 0
+        number_of_cities = 0
 
         for element in self.list_of_locations:
             # Count the unique occurrences of the different "Counties".
             if element.county != "":
-                different_counties.add(element.county)
+                number_of_different_counties.add(element.county)
                 different_counties_name = "powiaty"
-            # Count the occurrences of the community type: "Urban municipality".
+            # Count the occurrences of the location type: "Urban municipality".
             if element.community_type == "1":
-                urban_municipalities += 1
+                number_of_urban_municipalities += 1
                 urban_municipalities_name = element.type
-            # Count the occurrences of the community type: "Rural municipality".
+            # Count the occurrences of the location type: "Rural municipality".
             if element.community_type == "2":
-                rural_municipalities += 1
+                number_of_rural_municipalities += 1
                 rural_municipalities_name = element.type
-            # Count the occurrences of the community type: "Urban-rural municipality".
+            # Count the occurrences of the location type: "Urban-rural municipality".
             if element.community_type == "3":
-                urban_rural_municipalities += 1
+                number_of_urban_rural_municipalities += 1
                 urban_rural_municipalities_name = element.type
-            # Count the occurrences of the community type: "Village".
+            # Count the occurrences of the location type: "Village".
             if element.community_type == "5":
-                villages += 1
+                number_of_villages += 1
                 villages_name = element.type
-            # Count the occurrences of the community type: "Town".
+            # Count the occurrences of the location type: "Town".
             if element.community_type == "4":
-                towns += 1
+                number_of_towns += 1
                 towns_name = element.type
-            # Count the occurrences of the community type: "City".
+            # Count the occurrences of the location type: "City".
             if element.type == "miasto na prawach powiatu":
-                cities += 1
+                number_of_cities += 1
                 cities_name = element.type
 
-        dict_different_counties = {"powiaty": len(different_counties)}
-        for key, value in dict_different_counties.items():
-            print(value, key)
+        # Create the dictionaries from "element.type" (name of location type) as the KEY, and count of occurrences as the VALUE.
+        dict_different_counties = {different_counties_name: len(number_of_different_counties)}
+        dict_urban_municipalities = {urban_municipalities_name: number_of_urban_municipalities}
+        dict_rural_municipalities = {rural_municipalities_name: number_of_rural_municipalities}
+        dict_urban_rural_municipalities = {urban_rural_municipalities_name: number_of_urban_rural_municipalities}
+        dict_villages = {villages_name: number_of_villages}
+        dict_towns = {towns_name: number_of_towns}
+        dict_cities = {cities_name: number_of_cities}
 
-        dict_urban_municipalities = {urban_municipalities_name: urban_municipalities}
-        for key, value in dict_urban_municipalities.items():
-            print(value, key)
+        # Stack the dictionaries all together in a tuple.
+        tuple_of_all_dictionaries = (dict_different_counties, dict_urban_municipalities, dict_rural_municipalities,
+                                    dict_urban_rural_municipalities, dict_villages, dict_towns, dict_cities)
 
-        dict_rural_municipalities = {rural_municipalities_name: rural_municipalities}
-        for key, value in dict_rural_municipalities.items():
-            print(value, key)
+        # Save the values and keys from all dictionaries in the dedicated list.
+        all_dictionaries_items = []
 
-        dict_urban_rural_municipalities = {urban_rural_municipalities_name: urban_rural_municipalities}
-        for key, value in dict_urban_rural_municipalities.items():
-            print(value, key)
+        for one_dictionary in tuple_of_all_dictionaries:
+            for key, value in one_dictionary.items():
+                all_dictionaries_items.extend([(str(value), key)])  # Add pair of an items as tuple to the list of tuples.
 
-        dict_villages = {villages_name: villages}
-        for key, value in dict_villages.items():
-            print(value, key)
-
-        dict_towns = {towns_name: towns}
-        for key, value in dict_towns.items():
-            print(value, key)
-
-        dict_cities = {cities_name: cities}
-        for key, value in dict_cities.items():
-            print(value, key)
+        return all_dictionaries_items

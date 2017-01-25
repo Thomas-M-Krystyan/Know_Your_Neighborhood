@@ -41,7 +41,21 @@ def print_menu():
     return main_menu
 
 
-def print_table(headers, table_rows):
+# def create_delimiters():
+
+#     first_separator_line = []
+
+#     first_separator_line.append(".")
+#     for separator_number, separator_length in enumerate(column_length):
+#         if separator_number < len(headers) - 1:
+#             regular_column = "".rjust(column_width[separator_number] + 1, "-")
+#             first_separator_line.append(regular_column)
+#         else:
+#             last_column = "".rjust(column_width[separator_number], "-") + ".\n"
+#             first_separator_line.append(last_column)
+
+
+def print_table(headers, table_rows, header_delimiter="|", first_align="^", second_align="^", center_align_space=2, left_space_1=0, left_space_2=0, right_space_1=0, right_space_2=0):
     """
     Function which is used to display dynamic table in the console.
 
@@ -65,61 +79,102 @@ def print_table(headers, table_rows):
 
         # Count a length of the row in the table.
         for row in table_rows:
-            for element_number, element in enumerate(row):
+            for content_number, content in enumerate(row):
                 # Compare the longest word in the current column (headers vs. content).
-                if len(str(element)) > column_length[element_number]:
-                    column_length[element_number] = len(str(element))
+                if len(str(content)) > column_length[content_number]:
+                    column_length[content_number] = len(str(content))
 
         # Count a length of the special separator variable "width" for dynamic resizing the table.
         width = 0
+        column_width = []
 
         for word_length in column_length:
-            width = width + word_length + 3
+            column_width.append(word_length + 2)
 
-        # NOTE [1st DATA ELEMENT]: Return first line (separator) of the table.
-        first_line = "." + "".rjust(width - 1, "-") + ".\n"
+        # NOTE [1st DATA ELEMENT]: Display the FIRST header's separator line before the headers.
+        first_separator_line = []
 
-        # NOTE [2nd DATA ELEMENT]: Return headers for the table.
-        header_content = []
+        first_separator_line.append(".")
+        for separator_number, separator_length in enumerate(column_length):
+            if separator_number < len(headers) - 1:
+                regular_column = "".rjust(column_width[separator_number] + 1, "-")
+                first_separator_line.append(regular_column)
+            else:
+                last_column = "".rjust(column_width[separator_number], "-") + ".\n"
+                first_separator_line.append(last_column)
 
+        # NOTE [2nd DATA ELEMENT]: Display the headers for the table.
+        table_header = []
+
+        table_header.append("|")
         for element_number, element in enumerate(headers):
-            headers_line = "|" + Color.GREY_AREA + "{:^{}}".format(element, column_length[element_number] + 2) + Color.END
-            header_content.append(headers_line)
-        end_headers_line = "|"
-        header_content.append(end_headers_line)
+            # Print the "header_delimiter" from the function's keyword parameter (by default: "|").
+            if element_number < len(headers) - 1:
+                headers_line = Color.GREY_AREA + "{ls}{:{al}{len}}{rs}".format(element, al=first_align, len=column_length[element_number] + center_align_space, ls=" " * left_space_1, rs=" " * right_space_1) + Color.END + header_delimiter
+                table_header.append(headers_line)
+            else:
+                headers_line = Color.GREY_AREA + "{ls}{:{al}{len}}{rs}".format(element, al=second_align, len=column_length[element_number] + center_align_space, ls=" " * left_space_2, rs=" " * right_space_2) + Color.END + "|\n"
+                table_header.append(headers_line)
 
-        # Return end line (separator) after headers.
-        header_separator_line = "\n|" + "".rjust(width - 1, "-") + "|\n"
-        header_content.append(header_separator_line)
+        # NOTE [3rd DATA ELEMENT]: Display the END header's separator line after the headers.
+        header_separator_line = []
 
-        # NOTE [3rd DATA ELEMENT]: Return data content for the table.
+        header_separator_line.append("|")
+        for separator_number, separator_length in enumerate(column_length):
+            # Print the column delimiter (by default: "+").
+            if separator_number < len(headers) - 1:
+                regular_column = "".rjust(column_width[separator_number], "-") + "+"
+                header_separator_line.append(regular_column)
+            else:
+                last_column = "".rjust(column_width[separator_number], "-") + "|\n"
+                header_separator_line.append(last_column)
+
+        # NOTE [4th DATA ELEMENT]: Display the data content for the table.
         table_content = []
         # Count the amount of all rows in the table.
         number_of_items = 0
 
         for row_number, row in enumerate(table_rows, 1):
+            table_content.append("|")
             for element_number, element in enumerate(row):
-                table_line = "|{:^{}}".format(element, column_length[element_number] + 2)
-                next_line = "|\n"
-                table_content.append(table_line)
-                number_of_items += 1
-            table_content.append(next_line)
+                # Print the content delimiter (by default: "|").
+                if element_number < len(headers) - 1:
+                    content_line = "{ls}{:{al}{len}}{rs}".format(element, al=first_align, len=column_length[element_number] + center_align_space, ls=" " * left_space_1, rs=" " * right_space_1) + "|"
+                    table_content.append(content_line)
+                    number_of_items += 1
+                else:
+                    content_line = "{ls}{:{al}{len}}{rs}".format(element, al=second_align, len=column_length[element_number] + center_align_space, ls=" " * left_space_2, rs=" " * right_space_2) + "|\n"
+                    table_content.append(content_line)
+                    number_of_items += 1
 
-            # Return separator line for the table.
+            # Display the MIDDLE content's separator line after the middle content row(s).
             if row_number < len(table_rows):
-                end_line = "|" + "".rjust(width - 1, "-") + "|\n"
-                table_content.append(end_line)
+                table_content.append("|")
+                for separator_number, separator_length in enumerate(column_length):
+                    # Print the column delimiter (by default: "+").
+                    if separator_number < len(headers) - 1:
+                        regular_column = "".rjust(column_width[separator_number], "-") + "+"
+                        table_content.append(regular_column)
+                    else:
+                        last_column = "".rjust(column_width[separator_number], "-") + "|\n"
+                        table_content.append(last_column)
 
-            # Return end line for the table.
+            # Display the END content's separator line after the last content row.
             else:
-                end_line = "\'" + "".rjust(width - 1, "-") + "'\n"
-                table_content.append(end_line)
+                table_content.append("'")
+                for separator_number, separator_length in enumerate(column_length):
+                    if separator_number < len(headers) - 1:
+                        regular_column = "".rjust(column_width[separator_number] + 1, "-")
+                        table_content.append(regular_column)
+                    else:
+                        last_column = "".rjust(column_width[separator_number], "-") + "'\n"
+                        table_content.append(last_column)
 
-        # NOTE [4th DATA ELEMENT]: Display the sum of all items (columns) in the table.
+        # NOTE [5th DATA ELEMENT]: Display the sum of all items (rows) in the table.
         summary = number_of_items // number_of_headers
 
         # Create data from all the elements of above.
-        data = first_line + "".join(header_content) + "".join(table_content) + "\nNumber of all items: {}".format(summary)
+        data = "".join(first_separator_line) + "".join(table_header) + "".join(header_separator_line) + "".join(table_content) + "\nNumber of all items: {}".format(summary)
 
         return data
 

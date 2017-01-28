@@ -33,17 +33,16 @@ def main():
             # Initialize the data for the dynamic table.
             received_data = LocationList().list_statistics()
 
-            print(ui.print_table(header, received_data, ui.Color.GREY_AREA + " " + ui.Color.END, ">", "<", 0, 1, 1, 1, 1))  # 0 <--- center align
+            print(ui.print_table(header, received_data, ui.Color.GREY_AREA + " " + ui.Color.END, ">", "<"))
             """
             .---------------------------------.
-            |       MAŁOPOLSKIE               |  <--- Grey empty string delimiter
+            |       MAŁOPOLSKIE               |  <--- Grey empty string (" ") delimiter before name of the voyevodeship
             |-----+---------------------------|
             | 122 | gmina wiejska             |
             |-----+---------------------------|
             |   3 | miasto na prawach powiatu |
             '---------------------------------'
                 >   <                               <--- Type of the text alignment
-             1   1 1                         1      <--- Free spaces between borders
             """
             ui.separator()
             print(ui.print_menu())
@@ -53,7 +52,7 @@ def main():
             os.system("clear")
 
             # Initialize the headers for the dynamic table.
-            header = ["Cities: The longest name"]
+            header = ["Cities with longest names", "Letters"]
 
             # Initialize the data for the dynamic table.
             received_data = LocationList().longest_names()

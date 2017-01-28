@@ -55,7 +55,7 @@ def print_menu():
 #             first_separator_line.append(last_column)
 
 
-def print_table(headers, table_rows, header_delimiter="|", first_align="^", second_align="^", center_align_space=2, left_space_1=0, left_space_2=0, right_space_1=0, right_space_2=0):
+def print_table(headers, table_rows, header_delimiter="|", columns_align="^", last_column_align="^"):
     """
     Function which is used to display dynamic table in the console.
 
@@ -110,10 +110,10 @@ def print_table(headers, table_rows, header_delimiter="|", first_align="^", seco
         for element_number, element in enumerate(headers):
             # Print the "header_delimiter" from the function's keyword parameter (by default: "|").
             if element_number < len(headers) - 1:
-                headers_line = Color.GREY_AREA + "{ls}{:{al}{len}}{rs}".format(element, al=first_align, len=column_length[element_number] + center_align_space, ls=" " * left_space_1, rs=" " * right_space_1) + Color.END + header_delimiter
+                headers_line = Color.GREY_AREA + " {:{al}{len}} ".format(element, al=columns_align, len=column_length[element_number]) + Color.END + header_delimiter
                 table_header.append(headers_line)
             else:
-                headers_line = Color.GREY_AREA + "{ls}{:{al}{len}}{rs}".format(element, al=second_align, len=column_length[element_number] + center_align_space, ls=" " * left_space_2, rs=" " * right_space_2) + Color.END + "|\n"
+                headers_line = Color.GREY_AREA + " {:{al}{len}} ".format(element, al=last_column_align, len=column_length[element_number]) + Color.END + "|\n"
                 table_header.append(headers_line)
 
         # NOTE [3rd DATA ELEMENT]: Display the END header's separator line after the headers.
@@ -139,11 +139,11 @@ def print_table(headers, table_rows, header_delimiter="|", first_align="^", seco
             for element_number, element in enumerate(row):
                 # Print the content delimiter (by default: "|").
                 if element_number < len(headers) - 1:
-                    content_line = "{ls}{:{al}{len}}{rs}".format(element, al=first_align, len=column_length[element_number] + center_align_space, ls=" " * left_space_1, rs=" " * right_space_1) + "|"
+                    content_line = " {:{al}{len}} ".format(element, al=columns_align, len=column_length[element_number]) + "|"
                     table_content.append(content_line)
                     number_of_items += 1
                 else:
-                    content_line = "{ls}{:{al}{len}}{rs}".format(element, al=second_align, len=column_length[element_number] + center_align_space, ls=" " * left_space_2, rs=" " * right_space_2) + "|\n"
+                    content_line = " {:{al}{len}} ".format(element, al=last_column_align, len=column_length[element_number]) + "|\n"
                     table_content.append(content_line)
                     number_of_items += 1
 

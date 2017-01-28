@@ -42,7 +42,7 @@ def table_converter(data_file):
     """
     for element in data_file:
         # Create an instances of every line (row) with content from the list of lists.
-        current_location = Voivodeship(element[0], element[1], element[2], element[3], element[4], element[5])
+        current_location = Location(element[0], element[1], element[2], element[3], element[4], element[5])
 
         # Deliver the already created instances to the agregation-type class "LocationList".
         LocationList().add_location(current_location)

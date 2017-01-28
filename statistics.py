@@ -1,7 +1,7 @@
 import operator
 
 
-class Voivodeship:
+class Location:
     """
     Parent class using for creating instances
     of the current locations in a voivodeship
@@ -19,13 +19,13 @@ class Voivodeship:
 class LocationList:
     """
     Independent class using for aggregating the instances
-    of the class "Voivodeship" and for operating on them.
+    of the class "Location" and for operating on them.
     """
     list_of_locations = []
 
     def add_location(self, current_location):
         """
-        Method for append to the class attribute "list_of_locations" instances of the "Voivodeship" class.
+        Method for append to the class attribute "list_of_locations" instances of the "Location" class.
         """
         self.list_of_locations.append(current_location)
 
@@ -113,7 +113,7 @@ class LocationList:
 
         # Stack the dictionaries all together in a tuple.
         tuple_of_all_dictionaries = (dict_different_counties, dict_urban_municipalities, dict_rural_municipalities,
-                                    dict_urban_rural_municipalities, dict_villages, dict_towns, dict_cities)
+                                     dict_urban_rural_municipalities, dict_villages, dict_towns, dict_cities)
 
         # Save the values and keys from all dictionaries in the dedicated list.
         all_dictionaries_items = []
@@ -152,6 +152,6 @@ class LocationList:
 
         for number, location in enumerate(sorted_list):
             if number < 3:
-                the_longest_name.append([location.get("Name")])
+                the_longest_name.extend([(location.get("Name"), location.get("Name length"))])
 
         return the_longest_name

@@ -96,10 +96,27 @@ def main():
             ui.separator()
             print(ui.print_menu())
 
-        # NOTE [OPTION 5]:
+        # NOTE [OPTION 5]: Advanced search for substring among the location names.
         elif choice == "5":
             os.system("clear")
+
+            # Ask the user for the input (substring).
+            searched_phrase = input("Searching for: ")
+
+            # Initialize the headers for the dynamic table.
+            header = ["LOCATION", "TYPE"]
+
+            # Initialize the data for the dynamic table.
+            received_data = LocationList().advanced_search(searched_phrase)
+
+            # Handle the case when nothing wasn't found and prevents the broken (ugly) table.
+            if received_data == []:
+                received_data = [("None", "None")]
+
+            # Display the table.
+            print(ui.print_table(header, received_data, "|", "<", "<"))
             ui.separator()
+            print(ui.print_menu())
 
         # NOTE [SECRET OPTION]: Display a full content of the dynamic table from the CSV file.
         elif choice == "6":
@@ -132,5 +149,5 @@ if __name__ == "__main__":
     raw_file_content = data_manager.csv_reader("malopolska.csv")
     # 2nd step: Invoke converting the file's content to the list of objects.
     data_manager.table_converter(raw_file_content)
-
+    # 3rd step: Execute the main function of the program.
     main()

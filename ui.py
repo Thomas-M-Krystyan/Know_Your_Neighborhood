@@ -46,20 +46,6 @@ def print_menu():
     return main_menu
 
 
-# def create_delimiters():
-
-#     first_separator_line = []
-
-#     first_separator_line.append(".")
-#     for separator_number, separator_length in enumerate(column_length):
-#         if separator_number < len(headers) - 1:
-#             regular_column = "".rjust(column_width[separator_number] + 1, "-")
-#             first_separator_line.append(regular_column)
-#         else:
-#             last_column = "".rjust(column_width[separator_number], "-") + ".\n"
-#             first_separator_line.append(last_column)
-
-
 def print_table(headers, table_rows, header_delimiter="|", columns_align="^", last_column_align="^"):
     """
     Function which is used to display dynamic table in the console.

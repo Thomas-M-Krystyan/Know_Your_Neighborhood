@@ -208,7 +208,7 @@ class LocationList(object):
         (which automatically means that they represents many types of locations).
 
         Returns:
-            list with tuples (with strings)
+            list of tuples (with strings)
         """
         # NOTE: Get the names of all locations from the CSV file.
         list_of_any_occurrences = []
@@ -222,15 +222,15 @@ class LocationList(object):
         for name in set(list_of_any_occurrences):
             # Count the occurrence of the current location name.
             occurrence = list_of_any_occurrences.count(name)
-            # Create the dictionary based on location "Name" and its "Occurrence" on the "list_of_any_occurrences" as the VALUES.
+            # Create the dictionary based on location "Name" and its "Occurrence" as the VALUES.
             location_dict = ({"Name": name, "Occurrence": occurrence})
-            # Add the newly created dictionary, with the multiple occurred location (> 1).
+            # Add the newly created dictionary with the multiple occurred location (> 1).
             if location_dict.get("Occurrence") > 1:
                 list_of_multiple_occurrences_dict.append({"Name": name, "Occurrence": occurrence})
 
-        # NOTE: Sort the list of dictionaries twice: (1) by DESCENDING ORDER for the "Occurrence" and (2) by ASCENDING ORDER for the "Name".
+        # NOTE: Sort the list of dictionaries twice: (1st) by DESCENDING ORDER for the "Occurrence" and (2nd) by ASCENDING ORDER for the "Name".
         multi_dict_list = list_of_multiple_occurrences_dict  # Shorten the (already) unnecessarily long name.
-        double_sorted_list = sorted(multi_dict_list, key=lambda multi_dict_list: (-multi_dict_list["Occurrence"], multi_dict_list["Name"]))
+        double_sorted_list = sorted(multi_dict_list, key=lambda multi_dict_list: (-multi_dict_list["Occurrence"], multi_dict_list["Name"].lower()))
 
         # NOTE: Return the list of tuples based on the dictionaries values.
         final_multiple_data = []
@@ -240,3 +240,29 @@ class LocationList(object):
 
         return final_multiple_data
 
+    def advanced_search(self, searched_phrase):
+        """
+        The method to find the substring (from input) among
+        the list of all location names from the CSV file.
+
+        Returns:
+            list of tuples (with strings)
+        """
+        # NOTE: Search for the substring in list of location names (also strings) from the CSV file.
+        found_name = []
+
+        for location in self.list_of_locations:
+            # Compare "searched_phrase" derived from the [main.py] input to the names of locations on the "list_of_locations".
+            if searched_phrase in location.name.lower():
+                found_name.append({"Name": location.name, "Type": location.type})
+
+        # NOTE: Sort the list of dictionaries twice: (1st) by ASCENDING ORDER for the "Name" and (2nd) by ASCENDING ORDER for the "Type".
+        double_sorted_list = sorted(found_name, key=lambda found_name: (found_name["Name"].lower(), found_name["Type"].lower()))
+
+        # NOTE: Return the list of tuples based on the dictionaries values.
+        final_found_data = []
+
+        for dictionary in double_sorted_list:
+            final_found_data.append((dictionary.get("Name"), dictionary.get("Type")))
+
+        return final_found_data

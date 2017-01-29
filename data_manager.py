@@ -1,4 +1,4 @@
-import os
+import sys
 import re
 
 # Modules of the current program.
@@ -14,7 +14,7 @@ def csv_reader(data_file_name):
     """
     file_content = []
 
-    if os.path.exists(data_file_name):
+    try:
         with open(data_file_name, "r", encoding="utf-8") as file:
             next(file)  # Skip the first line of the file (because, in this case, it's just the header)
             for line in file:
@@ -24,8 +24,11 @@ def csv_reader(data_file_name):
             return file_content
 
     # Error handling for the non-existing CSV file.
-    else:
-        raise FileNotFoundError(ui.Color.RED + "ERROR: The file \"{}\" doesn't exist!".format(data_file_name) + ui.Color.END)
+    except FileNotFoundError as error:
+        ui.separator()
+        print(ui.Color.RED + "{}!".format(error) + ui.Color.END)
+        ui.separator()
+        sys.exit()
 
 
 def table_converter(data_file):
@@ -46,7 +49,7 @@ def table_converter(data_file):
     Returns:
         None
     """
-    if data_file is not None:
+    if data_file != []:
         for element in data_file:
             # Create an instances of every line (row) with content from the raw list of lists.
             current_location = Location(element[0], element[1], element[2], element[3], element[4], element[5])
@@ -55,4 +58,7 @@ def table_converter(data_file):
 
     # Error handling for the empty list of lists from the CSV file.
     else:
-        raise EOFError(ui.Color.RED + "ERROR: The file is empty!" + ui.Color.END)
+        ui.separator()
+        print(ui.Color.RED + "ERROR: File is empty!" + ui.Color.END)
+        ui.separator()
+        sys.exit()

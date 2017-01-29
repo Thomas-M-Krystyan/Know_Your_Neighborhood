@@ -33,6 +33,7 @@ def main():
             # Initialize the data for the dynamic table.
             received_data = LocationList().list_statistics()
 
+            # Display the table.
             print(ui.print_table(header, received_data, ui.Color.GREY_AREA + " " + ui.Color.END, ">", "<"))
             """
             .---------------------------------.
@@ -42,8 +43,11 @@ def main():
             |-----+---------------------------|
             |   3 | miasto na prawach powiatu |
             '---------------------------------'
-                >   <                               <--- Type of the text alignment
+                >   <                               <--- Type of the text alignment:
+                                                            to the right (">") and do the left "<")
             """
+            ui.separator()
+            print("* Including: \"miasto na prawach powiatu\"")
             ui.separator()
             print(ui.print_menu())
 
@@ -52,19 +56,30 @@ def main():
             os.system("clear")
 
             # Initialize the headers for the dynamic table.
-            header = ["Cities with longest names", "Letters"]
+            header = ["Top 3 longest city names", "Letters"]
 
             # Initialize the data for the dynamic table.
-            received_data = LocationList().longest_names()
+            received_data = LocationList().longest_cities_names()
 
+            # Display the table.
             print(ui.print_table(header, received_data))
             ui.separator()
             print(ui.print_menu())
 
-        # NOTE [OPTION 3]:
+        # NOTE [OPTION 3]: Display the county with the largest amount of communities.
         elif choice == "3":
             os.system("clear")
+
+            # Initialize the headers for the dynamic table.
+            header = ["The largest county", "Communities"]
+
+            # Initialize the data for the dynamic table.
+            received_data = LocationList().largest_county()
+
+            # Display the table.
+            print(ui.print_table(header, received_data))
             ui.separator()
+            print(ui.print_menu())
 
         # NOTE [OPTION 4]:
         elif choice == "4":
@@ -83,6 +98,7 @@ def main():
             # Initialize the headers for the dynamic table.
             headers = ["Voivodeship", "County", "Commune", "Type of Commune", "Name of Location", "Type of Location"]
 
+            # Display the table.
             print(ui.print_table(headers, raw_file_content))  # Receive the data for the dynamic table from the "data_manager.py".
             ui.separator()
             print(ui.print_menu())

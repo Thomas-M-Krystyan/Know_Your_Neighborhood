@@ -1,3 +1,4 @@
+import os
 import re
 
 # Modules of the current program.
@@ -13,13 +14,18 @@ def csv_reader(data_file_name):
     """
     file_content = []
 
-    with open(data_file_name, "r", encoding="utf-8") as file:
-        next(file)
-        for line in file:
-            clean_line = (re.split(',|;|:|\t|\n', line.strip()))  # Clearing every line of data list (removing separators and "\t", "\n") with RegEx.
-            file_content.append(clean_line)
+    if os.path.exists(data_file_name):
+        with open(data_file_name, "r", encoding="utf-8") as file:
+            next(file)  # Skip the first line of the file (because, in this case, it's just the header)
+            for line in file:
+                clean_line = (re.split(',|;|:|\t|\n', line.strip()))  # Clear every line of file (remove separators and "\t", "\n") with RegEx.
+                file_content.append(clean_line)
 
-    return file_content
+            return file_content
+
+    # Error handling for the non-existing CSV file.
+    else:
+        raise FileNotFoundError(ui.Color.RED + "ERROR: The file \"{}\" doesn't exist!".format(data_file_name) + ui.Color.END)
 
 
 def table_converter(data_file):
@@ -40,9 +46,13 @@ def table_converter(data_file):
     Returns:
         None
     """
-    for element in data_file:
-        # Create an instances of every line (row) with content from the list of lists.
-        current_location = Location(element[0], element[1], element[2], element[3], element[4], element[5])
+    if data_file is not None:
+        for element in data_file:
+            # Create an instances of every line (row) with content from the raw list of lists.
+            current_location = Location(element[0], element[1], element[2], element[3], element[4], element[5])
+            # Deliver the already created instances to the agregation-type class "LocationList".
+            LocationList().add_location(current_location)
 
-        # Deliver the already created instances to the agregation-type class "LocationList".
-        LocationList().add_location(current_location)
+    # Error handling for the empty list of lists from the CSV file.
+    else:
+        raise EOFError(ui.Color.RED + "ERROR: The file is empty!" + ui.Color.END)

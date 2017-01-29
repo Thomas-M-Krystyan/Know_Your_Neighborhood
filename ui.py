@@ -7,13 +7,18 @@ class Color:
     """
     Colors and font styles for text formatting.
     """
+    # Text colors.
     GREEN = "\033[92m"
     YELLOW = "\033[93m"
     RED = "\033[91m"
+
+    # Text format.
     BOLD = "\033[1m"
 
+    # Text area.
     GREY_AREA = "\x1b[0;30;47m"
 
+    # End the text formatting.
     END = "\033[0m"
 
 

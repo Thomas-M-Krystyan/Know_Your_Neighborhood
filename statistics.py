@@ -164,13 +164,13 @@ class LocationList(object):
 
     def largest_county(self):
         """
-        The method to find the county's name with
+        The method to find the county names with
         the largest number of communities in it.
 
         Returns:
             list with tuple (with strings)
         """
-        # NOTE: Create the list which contains the dictionaries of all counties in the CSV file.
+        # NOTE: Create the list which contains the dictionaries of all counties from the CSV file.
         list_of_all_counties_dict = []
 
         for location in self.list_of_locations:
@@ -196,8 +196,47 @@ class LocationList(object):
         # NOTE: Get the dictionary with the largest amount of the "Communities" in it from the "list_of_all_counties_dict".
         the_largest_county = max(list_of_all_counties_dict, key=operator.itemgetter("Communities"))
 
-        # NOTE: Return only the specific values of the largest county: its "Name" and number of "Communities".
+        # NOTE: Return only the specific VALUES of the largest county: its "Name" and number of "Communities".
         final_county_data = []
         final_county_data.extend([("powiat {}".format(the_largest_county.get("Name")), the_largest_county.get("Communities"))])
 
         return final_county_data
+
+    def locations_of_multiple_types(self):
+        """
+        The method to find the location names which are occurring more than once
+        (which automatically means that they represents many types of locations).
+
+        Returns:
+            list with tuples (with strings)
+        """
+        # NOTE: Get the names of all locations from the CSV file.
+        list_of_any_occurrences = []
+
+        for location in self.list_of_locations:
+            list_of_any_occurrences.append(location.name)
+
+        # NOTE: Get the names of locations which are occurring more than once.
+        list_of_multiple_occurrences_dict = []
+
+        for name in set(list_of_any_occurrences):
+            # Count the occurrence of the current location name.
+            occurrence = list_of_any_occurrences.count(name)
+            # Create the dictionary based on location "Name" and its "Occurrence" on the "list_of_any_occurrences" as the VALUES.
+            location_dict = ({"Name": name, "Occurrence": occurrence})
+            # Add the newly created dictionary, with the multiple occurred location (> 1).
+            if location_dict.get("Occurrence") > 1:
+                list_of_multiple_occurrences_dict.append({"Name": name, "Occurrence": occurrence})
+
+        # NOTE: Sort the list of dictionaries twice: (1) by DESCENDING ORDER for the "Occurrence" and (2) by ASCENDING ORDER for the "Name".
+        multi_dict_list = list_of_multiple_occurrences_dict  # Shorten the (already) unnecessarily long name.
+        double_sorted_list = sorted(multi_dict_list, key=lambda multi_dict_list: (-multi_dict_list["Occurrence"], multi_dict_list["Name"]))
+
+        # NOTE: Return the list of tuples based on the dictionaries values.
+        final_multiple_data = []
+
+        for dictionary in double_sorted_list:
+            final_multiple_data.append((dictionary.get("Name"), dictionary.get("Occurrence")))
+
+        return final_multiple_data
+

@@ -56,7 +56,7 @@ def main():
             os.system("clear")
 
             # Initialize the headers for the dynamic table.
-            header = ["Top 3 longest city names", "Letters"]
+            header = ["The longest city names", "Letters"]
 
             # Initialize the data for the dynamic table.
             received_data = LocationList().longest_cities_names()
@@ -66,7 +66,7 @@ def main():
             ui.separator()
             print(ui.print_menu())
 
-        # NOTE [OPTION 3]: Display the county with the largest amount of communities.
+        # NOTE [OPTION 3]: Display county's name with the largest number of communities.
         elif choice == "3":
             os.system("clear")
 
@@ -81,10 +81,20 @@ def main():
             ui.separator()
             print(ui.print_menu())
 
-        # NOTE [OPTION 4]:
+        # NOTE [OPTION 4]: Display locations, that belong to more than one category.
         elif choice == "4":
             os.system("clear")
+
+            # Initialize the headers for the dynamic table.
+            header = ["Locations of multiple types", "Occurrences"]
+
+            # Initialize the data for the dynamic table.
+            received_data = LocationList().locations_of_multiple_types()
+
+            # Display the table.
+            print(ui.print_table(header, received_data))
             ui.separator()
+            print(ui.print_menu())
 
         # NOTE [OPTION 5]:
         elif choice == "5":
@@ -92,11 +102,11 @@ def main():
             ui.separator()
 
         # NOTE [SECRET OPTION]: Display a full content of the dynamic table from the CSV file.
-        elif choice == "666":
+        elif choice == "6":
             os.system("clear")
 
             # Initialize the headers for the dynamic table.
-            headers = ["Voivodeship", "County", "Commune", "Type of Commune", "Name of Location", "Type of Location"]
+            headers = ["Voivodeship ID", "County ID", "Community ID", "Community Type ID", "Name of Location", "Type of Location"]
 
             # Display the table.
             print(ui.print_table(headers, raw_file_content))  # Receive the data for the dynamic table from the "data_manager.py".

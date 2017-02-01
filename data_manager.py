@@ -2,7 +2,7 @@ import sys
 import re
 
 # Modules of the current program.
-from statistics import *
+from statistics import Location, LocationList
 
 
 def csv_reader(data_file_name):

@@ -55,9 +55,11 @@ class LocationList(object):
         the indicated CSV file and to convert the gained data to the list of tuples.
 
         Returns:
-            list of tuples (with strings)
+            integer         (with number of all locations)          <--- Index[0]
+            list of tuples  (with numbers and names as strings)     <--- Index[1]
         """
         # NOTE: Calculate the following statistics.
+        number_of_voivodeships = 0
         number_of_different_counties = set()
         number_of_urban_communities = 0
         number_of_rural_communities = 0
@@ -65,8 +67,14 @@ class LocationList(object):
         number_of_villages = 0
         number_of_towns = 0
         number_of_cities = 0
+        number_of_delegatures = 0
 
         for location in self.list_of_locations:
+            # Count the occurrences of the following location type: "Voivodeship".
+            if location.voivodeship_id != "" and location.county_id == "":
+                number_of_voivodeships += 1
+                voivodeship_name = location.type
+
             # Count the unique occurrences of the different "Counties".
             if location.county_id != "":  # Do not count the empty strings.
                 number_of_different_counties.add(location.county_id)
@@ -76,59 +84,71 @@ class LocationList(object):
             # Count the occurrences of the following location type: "Urban community".
             if location.community_type_id == "1":
                 number_of_urban_communities += 1
-                urban_communities_name = location.type
+                urban_community_name = location.type
 
             # Count the occurrences of the following location type: "Rural community".
             if location.community_type_id == "2":
                 number_of_rural_communities += 1
-                rural_communities_name = location.type
+                rural_community_name = location.type
 
             # Count the occurrences of the following location type: "Urban-rural community".
             if location.community_type_id == "3":
                 number_of_urban_rural_communities += 1
-                urban_rural_communities_name = location.type
+                urban_rural_community_name = location.type
 
             # Count the occurrences of the following location type: "Village".
             if location.community_type_id == "5":
                 number_of_villages += 1
-                villages_name = location.type
+                village_name = location.type
 
             # Count the occurrences of the following location type: "Town".
             if location.community_type_id == "4":
                 number_of_towns += 1
-                towns_name = location.type
+                town_name = location.type
 
             # Insensitiveness for uppercase letters.
             type_of_location = location.type.lower()
             # Count the occurrences of the following location type: "City with county rights".
             if type_of_location == "miasto na prawach powiatu":
                 number_of_cities += 1
-                cities_name = location.type
+                city_name = location.type
+
+            # Count the occurrences of the following location type: "Delegature".
+            if location.community_type_id == "9":
+                number_of_delegatures += 1
+                delegature_name = location.type
+
+        # NOTE: Number of all individual locations.
+        number_of_all_locations = (number_of_voivodeships + len(number_of_different_counties) + number_of_urban_communities +
+                                   number_of_rural_communities + number_of_urban_rural_communities + number_of_villages +
+                                   number_of_towns + number_of_delegatures)
 
         # NOTE: Create the dictionaries from the "location.type" (name of location type) as the KEY, and count of occurrences as the VALUE.
+        dict_voicodeships = {voivodeship_name: number_of_voivodeships}
         dict_different_counties = {different_counties_name: len(number_of_different_counties)}
-        dict_urban_communities = {urban_communities_name: number_of_urban_communities}
-        dict_rural_communities = {rural_communities_name: number_of_rural_communities}
-        dict_urban_rural_communities = {urban_rural_communities_name: number_of_urban_rural_communities}
-        dict_villages = {villages_name: number_of_villages}
-        dict_towns = {towns_name: number_of_towns}
-        dict_cities = {cities_name: number_of_cities}
+        dict_urban_communities = {urban_community_name: number_of_urban_communities}
+        dict_rural_communities = {rural_community_name: number_of_rural_communities}
+        dict_urban_rural_communities = {urban_rural_community_name: number_of_urban_rural_communities}
+        dict_villages = {village_name: number_of_villages}
+        dict_towns = {town_name: number_of_towns}
+        dict_cities = {city_name: number_of_cities}
+        dict_delegatures = {delegature_name: number_of_delegatures}
 
         # NOTE: Stack the dictionaries all together in a tuple.
-        tuple_of_all_dictionaries = (dict_different_counties, dict_urban_communities, dict_rural_communities,
-                                     dict_urban_rural_communities, dict_villages, dict_towns, dict_cities)
+        tuple_of_all_dictionaries = (dict_voicodeships, dict_different_counties, dict_urban_communities, dict_rural_communities,
+                                     dict_urban_rural_communities, dict_villages, dict_towns, dict_cities, dict_delegatures)
 
         # NOTE: Save the values and keys from all of the dictionaries in the dedicated list.
-        all_dictionaries_items = []
+        all_locations_items = []
 
         for one_dictionary in tuple_of_all_dictionaries:
             for key, value in one_dictionary.items():
-                # Add collection of string-type items as tuple to the list of tuples "all_dictionaries_items".
-                all_dictionaries_items.extend([(str(value), key)])
+                # Add collection of string-type items as tuple to the list of tuples "all_locations_items".
+                all_locations_items.extend([(str(value), key)])
 
-        return all_dictionaries_items
+        return (number_of_all_locations, all_locations_items)
 
-    def longest_cities_names(self):
+    def longest_city_namess(self):
         """
         The method to count the name length of all the CITIES from
         the database and get the longest name (by default: top 3).

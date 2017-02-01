@@ -5,7 +5,7 @@ import sys
 # Modules of the current program.
 import data_manager
 import ui
-from statistics import *
+from statistics import Location, LocationList
 
 
 def main():
@@ -24,14 +24,17 @@ def main():
         if choice == "1":
             os.system("clear")
 
-            # Get name of the current voivodeship from CSV file.
+            # Get a name of the current voivodeship from the CSV file.
             name_of_voivodeship = LocationList().voivodeship_name()
 
             # Initialize the headers for the dynamic table.
             header = ["", name_of_voivodeship]
 
             # Initialize the data for the dynamic table.
-            received_data = LocationList().list_statistics()
+            received_data = LocationList().list_statistics()[1]
+
+            # Initialize the summary for number of all unique locations.
+            summary = LocationList().list_statistics()[0]
 
             # Display the table.
             print(ui.print_table(header, received_data, ui.Color.GREY_AREA + " " + ui.Color.END, ">", "<"))
@@ -47,6 +50,8 @@ def main():
                                                             to the right (">") and do the left "<")
             """
             ui.separator()
+            print("Number of all locations: {}".format(ui.Color.GREEN + str(summary) + ui.Color.END))
+            ui.separator()
             print("* Including: \"miasto na prawach powiatu\"")
             ui.separator()
             print(ui.print_menu())
@@ -59,7 +64,7 @@ def main():
             header = ["The longest city names", "Letters"]
 
             # Initialize the data for the dynamic table.
-            received_data = LocationList().longest_cities_names()
+            received_data = LocationList().longest_city_namess()
 
             # Display the table.
             print(ui.print_table(header, received_data))
